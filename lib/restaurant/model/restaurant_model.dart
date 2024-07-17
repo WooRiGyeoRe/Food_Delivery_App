@@ -1,10 +1,20 @@
 // priceRange는 3가지 값이 있음.
 // 따로 enum으로 만들어주겠음.
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_actual/common/const/data.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-enum RestaurantPriceRange { expensive, medium, cheap }
+part 'restaurant_model.g.dart'; // part + '현재 파일 이름 + .g + .dart';
 
+enum RestaurantPriceRange {
+  expensive,
+  medium,
+  cheap,
+}
+
+@JsonSerializable()
 class RestaurantModel {
   final String id;
   final String name;
@@ -31,19 +41,24 @@ class RestaurantModel {
     required this.deliveryTime,
   });
 
-  factory RestaurantModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return RestaurantModel(
-        id: json['id'],
-        name: json['name'],
-        thumbUrl: 'http://$ip${json['thumbUrl']}',
-        tags: List<String>.from(json['tags']),
-        priceRange: RestaurantPriceRange.values
-            .firstWhere((e) => e.name == json['priceRange']),
-        ratings: json['ratings'],
-        ratingsCount: json['ratingsCount'],
-        deliveryFee: json['deliveryFee'],
-        deliveryTime: json['deliveryTime']);
-  }
+  factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
+
+  // factory RestaurantModel.fromJson({
+  //   required Map<String, dynamic> json,
+  // }) {
+  //   return RestaurantModel(
+  //       id: json['id'],
+  //       name: json['name'],
+  //       thumbUrl: 'http://$ip${json['thumbUrl']}',
+  //       tags: List<String>.from(json['tags']),
+  //       priceRange: RestaurantPriceRange.values
+  //           .firstWhere((e) => e.name == json['priceRange']),
+  //       ratings: json['ratings'],
+  //       ratingsCount: json['ratingsCount'],
+  //       deliveryFee: json['deliveryFee'],
+  //       deliveryTime: json['deliveryTime']);
+  // }
 }

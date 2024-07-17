@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   dio: ^5.5.0+1
   flutter_secure_storage: ^9.2.2
+  json_annotation: ^4.9.0
  
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.2
+  build_runner: ^2.3.3
+  json_serializable: ^6.8.0
+
  
 
 # For information on the generic Dart part of this file, see the
