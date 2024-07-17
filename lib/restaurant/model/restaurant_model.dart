@@ -18,6 +18,9 @@ enum RestaurantPriceRange {
 class RestaurantModel {
   final String id;
   final String name;
+  @JsonKey(
+    fromJson: pathToUrl,
+  )
   final String thumbUrl;
   final List<String> tags;
   final RestaurantPriceRange priceRange;
@@ -45,6 +48,11 @@ class RestaurantModel {
       _$RestaurantModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
+
+  // value = thumbUrl
+  static pathToUrl(String value) {
+    return 'http://$ip$value';
+  }
 
   // factory RestaurantModel.fromJson({
   //   required Map<String, dynamic> json,
