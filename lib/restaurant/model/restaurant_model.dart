@@ -1,9 +1,9 @@
 // priceRange는 3가지 값이 있음.
 // 따로 enum으로 만들어주겠음.
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_actual/common/const/data.dart';
+import 'package:flutter_actual/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'restaurant_model.g.dart'; // part + '현재 파일 이름 + .g + .dart';
@@ -19,7 +19,7 @@ class RestaurantModel {
   final String id;
   final String name;
   @JsonKey(
-    fromJson: pathToUrl,
+    fromJson: DataUtils.pathToUrl,
   )
   final String thumbUrl;
   final List<String> tags;
@@ -50,9 +50,12 @@ class RestaurantModel {
   Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
 
   // value = thumbUrl
+  // 이 코드는 data_utils.dart 로 잘라붙이기
+  /* 
   static pathToUrl(String value) {
     return 'http://$ip$value';
   }
+  */
 
   // factory RestaurantModel.fromJson({
   //   required Map<String, dynamic> json,

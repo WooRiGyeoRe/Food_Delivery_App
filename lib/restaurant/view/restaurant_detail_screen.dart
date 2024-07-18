@@ -41,7 +41,7 @@ class RestaurantDetailScreen extends StatelessWidget {
             );
           }
           // data가 있을 때 (data! => data는 무조건 존재한다)
-          final item = RestaurantDetailModel.fromJson(json: snapshot.data!);
+          final item = RestaurantDetailModel.fromJson(snapshot.data!);
 
           return CustomScrollView(
             slivers: [
