@@ -4,12 +4,13 @@ import 'package:flutter_actual/common/const/data.dart';
 import 'package:flutter_actual/common/dio/dio.dart';
 import 'package:flutter_actual/restaurant/component/restaurant_card.dart';
 import 'package:flutter_actual/restaurant/model/restaurant_model.dart';
+import 'package:flutter_actual/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_actual/restaurant/view/restaurant_detail_screen.dart';
 
 class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({super.key});
 
-  Future<List> paginateRestaurant() async {
+  Future<List<RestaurantModel>> paginateRestaurant() async {
     final dio = Dio(); // ★ 이 dio와 RestaurantDetailScreen의 dio는 다름
 
     // 1.
@@ -18,19 +19,11 @@ class RestaurantScreen extends StatelessWidget {
       CustomInterceptor(storage: storage),
     );
 
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    final resp = await dio.get(
-      'http://$ip/restaurant',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-    // return resp.data를 하면 실제 바디 가져올 수 있음!
-    // 그런데 내가 가져오고 싶은 값은?
-    // data라는 키 안에 있는 값들만 반환할 거임!! -> 그래야 List 값을 가져올 수 있기에...
-    return resp.data['data'];
+    final resp =
+        await RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant')
+            .paginate();
+
+    return resp.data;
   }
 
   @override
@@ -40,9 +33,9 @@ class RestaurantScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           // <List>를 사용해 어떤 값이 들어오는지 확인
-          child: FutureBuilder<List>(
+          child: FutureBuilder<List<RestaurantModel>>(
             future: paginateRestaurant(),
-            builder: (context, AsyncSnapshot<List> snapshot) {
+            builder: (context, AsyncSnapshot<List<RestaurantModel>> snapshot) {
               // 만약 snapshot에 data가 없으면
               if (!snapshot.hasData) {
                 return const Center(
@@ -56,8 +49,7 @@ class RestaurantScreen extends StatelessWidget {
                 // itemBuilder는 index를 받아서 각 아이템별로 렌더링
                 itemBuilder: (_, index) {
                   // 아이템 저장
-                  final item = snapshot.data![index];
-                  final pItem = RestaurantModel.fromJson(item);
+                  final pItem = snapshot.data![index];
 
                   return GestureDetector(
                     onTap: () {
