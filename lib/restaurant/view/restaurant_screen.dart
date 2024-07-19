@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_actual/common/const/data.dart';
+import 'package:flutter_actual/common/dio/dio.dart';
 import 'package:flutter_actual/restaurant/component/restaurant_card.dart';
 import 'package:flutter_actual/restaurant/model/restaurant_model.dart';
 import 'package:flutter_actual/restaurant/view/restaurant_detail_screen.dart';
@@ -9,7 +10,13 @@ class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({super.key});
 
   Future<List> paginateRestaurant() async {
-    final dio = Dio();
+    final dio = Dio(); // ★ 이 dio와 RestaurantDetailScreen의 dio는 다름
+
+    // 1.
+    // ★ 하지만 똑같은 CustomInterceptor를 적용
+    dio.interceptors.add(
+      CustomInterceptor(storage: storage),
+    );
 
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final resp = await dio.get(
